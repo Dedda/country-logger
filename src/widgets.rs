@@ -80,9 +80,7 @@ pub struct CountryInfo {
 }
 
 #[derive(Debug)]
-pub enum CountryInfoMessage {
-
-}
+pub enum CountryInfoMessage {}
 
 impl CountryInfo {
 
@@ -187,21 +185,19 @@ fn draw_country(country: &Country, frame: &mut Frame) {
 }
 
 fn draw_polygon(polygon: &Polygon, frame: &mut Frame) {
-    let frame_size = Point(frame.width() as f64, frame.height() as f64);
+    let frame_size = Point(frame.width(), frame.height());
     if polygon.0.is_empty() {
         return;
     }
     let points: Vec<Point> = polygon.iter()
-        .map(|point| {
-            point.scale(frame_size.0, frame_size.1)
-        })
+        .map(|point| point.scale(frame_size.0, frame_size.1))
         .collect();
     let country = Path::new(|path| {
         let mut points = points.iter();
         let origin = points.next().unwrap();
-        path.move_to(iced::Point::new(origin.0 as f32, origin.1 as f32));
+        path.move_to(iced::Point::new(origin.0, origin.1));
         for point in points {
-            path.line_to(iced::Point::new(point.0 as f32, point.1 as f32));
+            path.line_to(iced::Point::new(point.0, point.1));
         }
         path.close();
     });

@@ -1,5 +1,5 @@
 use diesel::{Insertable, Queryable, Selectable};
-use crate::base_data::{BaseDataCountry, ISOCode};
+use crate::base_data::BaseDataCountry;
 
 #[derive(Queryable, Selectable, Debug, Clone)]
 #[diesel(table_name = crate::schema::countries)]
@@ -29,17 +29,10 @@ pub struct NewCountry {
 
 impl From<BaseDataCountry> for NewCountry {
     fn from(value: BaseDataCountry) -> Self {
-        let BaseDataCountry {
-            name,
-            iso_code: ISOCode {
-                alpha2,
-                alpha3,
-            },
-        } = value;
         Self {
-            name,
-            iso2: alpha2,
-            iso3: alpha3,
+            name: value.name,
+            iso2: value.iso_code.alpha2,
+            iso3: value.iso_code.alpha3,
         }
     }
 }

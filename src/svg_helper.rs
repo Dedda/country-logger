@@ -7,8 +7,8 @@ use svg::node::element::path::{Command, Data, Number, Position};
 use svg::parser::Event;
 
 static SVG_FILES: Dir = include_dir!("src/svg");
-pub const SVG_WIDTH: f64 = 2000.0;
-pub const SVG_HEIGT: f64 = 857.0;
+pub const SVG_WIDTH: f32 = 2000.0;
+pub const SVG_HEIGT: f32 = 857.0;
 
 lazy_static! {
         pub static ref COUNTRY_POLYGONS: HashMap<String, Vec<Polygon>> = {
@@ -24,10 +24,10 @@ lazy_static! {
 }
 
 #[derive(Clone)]
-pub struct Point(pub f64, pub f64);
+pub struct Point(pub f32, pub f32);
 
 impl Point {
-    pub fn scale(&self, width: f64, height: f64) -> Point {
+    pub fn scale(&self, width: f32, height: f32) -> Point {
         Point(self.0 * width, self.1 * height)
     }
 }
@@ -72,7 +72,6 @@ fn polygons_from_svg(source: &str) -> Vec<Polygon> {
                     Command::Line(pos, params) => {
                         let mut iterator = params.iter().peekable();
                         match pos {
-
                             Position::Absolute => {
                                 loop {
                                     last_point = Some(point_from_iter(&mut iterator));
@@ -112,7 +111,7 @@ fn scale_polygon(polygon: Polygon) -> Polygon {
 }
 
 fn point_from_iter(iter: &mut Peekable<Iter<Number>>) -> Point {
-    Point(*iter.next().unwrap() as f64, *iter.next().unwrap() as f64)
+    Point(*iter.next().unwrap(), *iter.next().unwrap())
 }
 
 fn rel_point_from_iter(iter: &mut Peekable<Iter<Number>>, reference: &Point) -> Point {
