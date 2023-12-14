@@ -179,12 +179,14 @@ impl<Message> canvas::Program<Message> for WorldMap {
 fn draw_country(country: &Country, frame: &mut Frame) {
     if let Some(polygons) = COUNTRY_POLYGONS.get(&country.iso2) {
         for polygon in polygons {
-            draw_polygon(polygon, frame);
+            let iso3_bytes = country.iso3.as_bytes();
+            let color = Color::from_rgb8(iso3_bytes[0], iso3_bytes[1], iso3_bytes[2]);
+            draw_polygon(polygon, color, frame);
         }
     }
 }
 
-fn draw_polygon(polygon: &Polygon, frame: &mut Frame) {
+fn draw_polygon(polygon: &Polygon, color: Color, frame: &mut Frame) {
     let frame_size = Point(frame.width(), frame.height());
     if polygon.0.is_empty() {
         return;
@@ -201,7 +203,8 @@ fn draw_polygon(polygon: &Polygon, frame: &mut Frame) {
         }
         path.close();
     });
-    frame.fill(&country, Fill { style: fill::Style::Solid(Color::from_rgb(1.0, 0.0, 0.5)), ..Fill::default()});
+    // frame.fill(&country, Fill { style: fill::Style::Solid(Color::from_rgb(1.0, 0.0, 0.5)), ..Fill::default()});
+    frame.fill(&country, Fill { style: fill::Style::Solid(color), ..Fill::default()});
     frame.stroke(&country, Stroke {
         style: stroke::Style::Solid(Color::from_rgb(0.0, 0.0, 0.0)),
         width: 1.0,
