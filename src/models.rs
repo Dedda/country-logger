@@ -36,3 +36,11 @@ impl From<BaseDataCountry> for NewCountry {
         }
     }
 }
+
+#[derive(Queryable, Selectable, Debug, Clone)]
+#[diesel(belongs_to(Country))]
+#[diesel(table_name = crate::schema::country_visits)]
+pub struct CountryVisit {
+    pub id: i32,
+    pub country_id: i32,
+}
