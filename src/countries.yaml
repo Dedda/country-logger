@@ -1,0 +1,996 @@
+- name: Afghanistan
+  iso_code:
+    alpha2: AF
+    alpha3: AFG
+- name: Åland Islands
+  iso_code:
+    alpha2: AX
+    alpha3: ALA
+- name: Albania
+  iso_code:
+    alpha2: AL
+    alpha3: ALB
+- name: Algeria
+  iso_code:
+    alpha2: DZ
+    alpha3: DZA
+- name: American Samoa
+  iso_code:
+    alpha2: AS
+    alpha3: ASM
+- name: Andorra
+  iso_code:
+    alpha2: AD
+    alpha3: AND
+- name: Angola
+  iso_code:
+    alpha2: AO
+    alpha3: AGO
+- name: Anguilla
+  iso_code:
+    alpha2: AI
+    alpha3: AIA
+- name: Antarctica
+  iso_code:
+    alpha2: AQ
+    alpha3: ATA
+- name: Antigua and Barbuda
+  iso_code:
+    alpha2: AG
+    alpha3: ATG
+- name: Argentina
+  iso_code:
+    alpha2: AR
+    alpha3: ARG
+- name: Armenia
+  iso_code:
+    alpha2: AM
+    alpha3: ARM
+- name: Aruba
+  iso_code:
+    alpha2: AW
+    alpha3: ABW
+- name: Australia
+  iso_code:
+    alpha2: AU
+    alpha3: AUS
+- name: Austria
+  iso_code:
+    alpha2: AT
+    alpha3: AUT
+- name: Azerbaijan
+  iso_code:
+    alpha2: AZ
+    alpha3: AZE
+- name: Bahamas
+  iso_code:
+    alpha2: BS
+    alpha3: BHS
+- name: Bahrain
+  iso_code:
+    alpha2: BH
+    alpha3: BHR
+- name: Bangladesh
+  iso_code:
+    alpha2: BD
+    alpha3: BGD
+- name: Barbados
+  iso_code:
+    alpha2: BB
+    alpha3: BRB
+- name: Belarus
+  iso_code:
+    alpha2: BY
+    alpha3: BLR
+- name: Belgium
+  iso_code:
+    alpha2: BE
+    alpha3: BEL
+- name: Belize
+  iso_code:
+    alpha2: BZ
+    alpha3: BLZ
+- name: Benin
+  iso_code:
+    alpha2: BJ
+    alpha3: BEN
+- name: Bermuda
+  iso_code:
+    alpha2: BM
+    alpha3: BMU
+- name: Bhutan
+  iso_code:
+    alpha2: BT
+    alpha3: BTN
+- name: Bolivia
+  iso_code:
+    alpha2: BO
+    alpha3: BOL
+- name: Bonaire, Sint Eustatius and Saba
+  iso_code:
+    alpha2: BQ
+    alpha3: BES
+- name: Bosnia and Herzegovina
+  iso_code:
+    alpha2: BA
+    alpha3: BIH
+- name: Botswana
+  iso_code:
+    alpha2: BW
+    alpha3: BWA
+- name: Bouvet Island
+  iso_code:
+    alpha2: BV
+    alpha3: BVT
+- name: Brazil
+  iso_code:
+    alpha2: BR
+    alpha3: BRA
+- name: British Indian Ocean Territory
+  iso_code:
+    alpha2: IO
+    alpha3: IOT
+- name: Brunei Darussalam
+  iso_code:
+    alpha2: BN
+    alpha3: BRN
+- name: Bulgaria
+  iso_code:
+    alpha2: BG
+    alpha3: BGR
+- name: Burkina Faso
+  iso_code:
+    alpha2: BF
+    alpha3: BFA
+- name: Burundi
+  iso_code:
+    alpha2: BI
+    alpha3: BDI
+- name: Cabo Verde
+  iso_code:
+    alpha2: CV
+    alpha3: CBV
+- name: Cambodia
+  iso_code:
+    alpha2: KH
+    alpha3: KHM
+- name: Cameroon
+  iso_code:
+    alpha2: CM
+    alpha3: CMR
+- name: Canada
+  iso_code:
+    alpha2: CA
+    alpha3: CAN
+- name: Cayman Islands
+  iso_code:
+    alpha2: KY
+    alpha3: CYM
+- name: Central African Republic
+  iso_code:
+    alpha2: CF
+    alpha3: CAF
+- name: Chad
+  iso_code:
+    alpha2: TD
+    alpha3: TCD
+- name: Chile
+  iso_code:
+    alpha2: CL
+    alpha3: CHL
+- name: China
+  iso_code:
+    alpha2: CN
+    alpha3: CHN
+- name: Christmas Island
+  iso_code:
+    alpha2: CX
+    alpha3: CXR
+- name: Cocos (Keeling) Islands
+  iso_code:
+    alpha2: CC
+    alpha3: CCK
+- name: Colombia
+  iso_code:
+    alpha2: CO
+    alpha3: COL
+- name: Comoros
+  iso_code:
+    alpha2: KM
+    alpha3: COM
+- name: Congo
+  iso_code:
+    alpha2: CG
+    alpha3: COG
+- name: Cook Islands
+  iso_code:
+    alpha2: CK
+    alpha3: COK
+- name: Costa Rica
+  iso_code:
+    alpha2: CR
+    alpha3: CRI
+- name: Côte d'Ivoire
+  iso_code:
+    alpha2: CI
+    alpha3: CIV
+- name: Croatia
+  iso_code:
+    alpha2: HR
+    alpha3: HRV
+- name: Cuba
+  iso_code:
+    alpha2: CU
+    alpha3: CUB
+- name: Curaçao
+  iso_code:
+    alpha2: CW
+    alpha3: CUW
+- name: Cyprus
+  iso_code:
+    alpha2: CY
+    alpha3: CYP
+- name: Czechia
+  iso_code:
+    alpha2: CZ
+    alpha3: CZE
+- name: Democratic Republic of the Congo
+  iso_code:
+    alpha2: CD
+    alpha3: COD
+- name: Denmark
+  iso_code:
+    alpha2: DK
+    alpha3: DNK
+- name: Djibouti
+  iso_code:
+    alpha2: DJ
+    alpha3: DJI
+- name: Dominica
+  iso_code:
+    alpha2: DM
+    alpha3: DMA
+- name: Dominican Republic
+  iso_code:
+    alpha2: DO
+    alpha3: DOM
+- name: Ecuador
+  iso_code:
+    alpha2: EC
+    alpha3: ECU
+- name: Egypt
+  iso_code:
+    alpha2: EG
+    alpha3: EGY
+- name: El Salvador
+  iso_code:
+    alpha2: SV
+    alpha3: SLV
+- name: Equatorial Guinea
+  iso_code:
+    alpha2: GQ
+    alpha3: GQN
+- name: Eritrea
+  iso_code:
+    alpha2: ER
+    alpha3: ERI
+- name: Estonia
+  iso_code:
+    alpha2: EE
+    alpha3: EST
+- name: Eswatini
+  iso_code:
+    alpha2: SZ
+    alpha3: SWZ
+- name: Ethiopia
+  iso_code:
+    alpha2: ET
+    alpha3: ETH
+- name: Falkland Islands (Malvinas)
+  iso_code:
+    alpha2: FK
+    alpha3: FLK
+- name: Faroe Islands
+  iso_code:
+    alpha2: FO
+    alpha3: FRO
+- name: Fiji
+  iso_code:
+    alpha2: FJ
+    alpha3: FJI
+- name: Finland
+  iso_code:
+    alpha2: FI
+    alpha3: FIN
+- name: France
+  iso_code:
+    alpha2: FR
+    alpha3: FRA
+- name: French Guiana
+  iso_code:
+    alpha2: GF
+    alpha3: GUF
+- name: French Polynesia
+  iso_code:
+    alpha2: PF
+    alpha3: PYF
+- name: French Southern Territories
+  iso_code:
+    alpha2: TF
+    alpha3: ATF
+- name: Gabon
+  iso_code:
+    alpha2: GA
+    alpha3: GAB
+- name: Gambia
+  iso_code:
+    alpha2: GM
+    alpha3: GMB
+- name: Georgia
+  iso_code:
+    alpha2: GE
+    alpha3: GEO
+- name: Germany
+  iso_code:
+    alpha2: DE
+    alpha3: DEU
+- name: Ghana
+  iso_code:
+    alpha2: GH
+    alpha3: GHA
+- name: Gibraltar
+  iso_code:
+    alpha2: GI
+    alpha3: GIB
+- name: Greece
+  iso_code:
+    alpha2: GR
+    alpha3: GRC
+- name: Greenland
+  iso_code:
+    alpha2: GL
+    alpha3: GRL
+- name: Grenada
+  iso_code:
+    alpha2: GD
+    alpha3: GRD
+- name: Guadeloupe
+  iso_code:
+    alpha2: GP
+    alpha3: GLP
+- name: Guam
+  iso_code:
+    alpha2: GU
+    alpha3: GUM
+- name: Guatemala
+  iso_code:
+    alpha2: GT
+    alpha3: GTM
+- name: Guernsey
+  iso_code:
+    alpha2: GG
+    alpha3: GGY
+- name: Guinea
+  iso_code:
+    alpha2: GN
+    alpha3: GIN
+- name: Guinea-Bissau
+  iso_code:
+    alpha2: GW
+    alpha3: GBN
+- name: Guyana
+  iso_code:
+    alpha2: GY
+    alpha3: GUY
+- name: Haiti
+  iso_code:
+    alpha2: HT
+    alpha3: HTI
+- name: Heard Island and McDonald Islands
+  iso_code:
+    alpha2: HM
+    alpha3: HMD
+- name: Holy See
+  iso_code:
+    alpha2: VA
+    alpha3: VAT
+- name: Honduras
+  iso_code:
+    alpha2: HN
+    alpha3: HND
+- name: Hong Kong
+  iso_code:
+    alpha2: HK
+    alpha3: HKG
+- name: Hungary
+  iso_code:
+    alpha2: HU
+    alpha3: HUN
+- name: Island
+  iso_code:
+    alpha2: IS
+    alpha3: ISL
+- name: India
+  iso_code:
+    alpha2: IN
+    alpha3: IND
+- name: Indonesia
+  iso_code:
+    alpha2: ID
+    alpha3: IDN
+- name: Iran
+  iso_code:
+    alpha2: IR
+    alpha3: IRN
+- name: Iraq
+  iso_code:
+    alpha2: IQ
+    alpha3: IRQ
+- name: Ireland
+  iso_code:
+    alpha2: IE
+    alpha3: IRL
+- name: Isle of Man
+  iso_code:
+    alpha2: IM
+    alpha3: IMN
+- name: Israel
+  iso_code:
+    alpha2: IL
+    alpha3: ISR
+- name: Italy
+  iso_code:
+    alpha2: IT
+    alpha3: ITA
+- name: Jamaica
+  iso_code:
+    alpha2: JM
+    alpha3: JAM
+- name: Japan
+  iso_code:
+    alpha2: JP
+    alpha3: JPN
+- name: Jersey
+  iso_code:
+    alpha2: JE
+    alpha3: JEY
+- name: Jordan
+  iso_code:
+    alpha2: JO
+    alpha3: JOR
+- name: Kazakhstan
+  iso_code:
+    alpha2: KZ
+    alpha3: KAZ
+- name: Kenya
+  iso_code:
+    alpha2: KE
+    alpha3: KEN
+- name: Kiribati
+  iso_code:
+    alpha2: KI
+    alpha3: KIR
+- name: Korea (North)
+  iso_code:
+    alpha2: KP
+    alpha3: PRK
+- name: Korea (South)
+  iso_code:
+    alpha2: KR
+    alpha3: KOR
+- name: Kuwait
+  iso_code:
+    alpha2: KW
+    alpha3: KWT
+- name: Kyrgyzstan
+  iso_code:
+    alpha2: KG
+    alpha3: KGZ
+- name: Laos
+  iso_code:
+    alpha2: LA
+    alpha3: LAO
+- name: Latvia
+  iso_code:
+    alpha2: LV
+    alpha3: LVA
+- name: Lebanon
+  iso_code:
+    alpha2: LB
+    alpha3: LBN
+- name: Lesotho
+  iso_code:
+    alpha2: LS
+    alpha3: LSO
+- name: Liberia
+  iso_code:
+    alpha2: LR
+    alpha3: LBR
+- name: Libya
+  iso_code:
+    alpha2: LY
+    alpha3: LBY
+- name: Liechtenstein
+  iso_code:
+    alpha2: LI
+    alpha3: LIE
+- name: Lithuania
+  iso_code:
+    alpha2: LT
+    alpha3: LTU
+- name: Luxembourg
+  iso_code:
+    alpha2: LU
+    alpha3: LUX
+- name: Macao
+  iso_code:
+    alpha2: MO
+    alpha3: MAC
+- name: Madagascar
+  iso_code:
+    alpha2: MG
+    alpha3: MDG
+- name: Malawi
+  iso_code:
+    alpha2: MW
+    alpha3: MWI
+- name: Malaysia
+  iso_code:
+    alpha2: MY
+    alpha3: MYS
+- name: Maldives
+  iso_code:
+    alpha2: MV
+    alpha3: MDV
+- name: Mali
+  iso_code:
+    alpha2: ML
+    alpha3: MLI
+- name: Malta
+  iso_code:
+    alpha2: MT
+    alpha3: MLT
+- name: Marshall Islands
+  iso_code:
+    alpha2: MH
+    alpha3: MHL
+- name: Martinique
+  iso_code:
+    alpha2: MQ
+    alpha3: MTQ
+- name: Mauritania
+  iso_code:
+    alpha2: MR
+    alpha3: MRT
+- name: Mauritius
+  iso_code:
+    alpha2: MU
+    alpha3: MUS
+- name: Mayotte
+  iso_code:
+    alpha2: YT
+    alpha3: MYT
+- name: Mexico
+  iso_code:
+    alpha2: MX
+    alpha3: MEX
+- name: Micronesia
+  iso_code:
+    alpha2: FM
+    alpha3: FSM
+- name: Moldova
+  iso_code:
+    alpha2: MD
+    alpha3: MDA
+- name: Monaco
+  iso_code:
+    alpha2: MC
+    alpha3: MCO
+- name: Mongolia
+  iso_code:
+    alpha2: MN
+    alpha3: MNG
+- name: Montenegro
+  iso_code:
+    alpha2: ME
+    alpha3: MNE
+- name: Montserrat
+  iso_code:
+    alpha2: MS
+    alpha3: MSR
+- name: Morocco
+  iso_code:
+    alpha2: MA
+    alpha3: MAR
+- name: Mozambique
+  iso_code:
+    alpha2: MZ
+    alpha3: MOZ
+- name: Myanmar
+  iso_code:
+    alpha2: MM
+    alpha3: MMR
+- name: Namibia
+  iso_code:
+    alpha2: NA
+    alpha3: NAM
+- name: Nauru
+  iso_code:
+    alpha2: NR
+    alpha3: NRU
+- name: Nepal
+  iso_code:
+    alpha2: NP
+    alpha3: NPL
+- name: Netherlands
+  iso_code:
+    alpha2: ND
+    alpha3: NLD
+- name: New Caledonia
+  iso_code:
+    alpha2: NC
+    alpha3: NCL
+- name: New Zealand
+  iso_code:
+    alpha2: NZ
+    alpha3: NZL
+- name: Nicaragua
+  iso_code:
+    alpha2: NI
+    alpha3: NIC
+- name: Niger
+  iso_code:
+    alpha2: NE
+    alpha3: NER
+- name: Nigeria
+  iso_code:
+    alpha2: NG
+    alpha3: NGA
+- name: Niue
+  iso_code:
+    alpha2: NU
+    alpha3: NIU
+- name: Norfolk Island
+  iso_code:
+    alpha2: NF
+    alpha3: NFK
+- name: North Macedonia
+  iso_code:
+    alpha2: MK
+    alpha3: MKD
+- name: Northern Mariana Islands
+  iso_code:
+    alpha2: MP
+    alpha3: MNP
+- name: Norway
+  iso_code:
+    alpha2: NO
+    alpha3: NOR
+- name: Oman
+  iso_code:
+    alpha2: OM
+    alpha3: OMN
+- name: Pakistan
+  iso_code:
+    alpha2: PK
+    alpha3: PAK
+- name: Palau
+  iso_code:
+    alpha2: PW
+    alpha3: PLW
+- name: Palestine
+  iso_code:
+    alpha2: PS
+    alpha3: PSE
+- name: Panama
+  iso_code:
+    alpha2: PA
+    alpha3: PAN
+- name: Papua New Guinea
+  iso_code:
+    alpha2: PG
+    alpha3: PNG
+- name: Paraguay
+  iso_code:
+    alpha2: PY
+    alpha3: PRY
+- name: Peru
+  iso_code:
+    alpha2: PE
+    alpha3: PER
+- name: Philippines
+  iso_code:
+    alpha2: PH
+    alpha3: PHL
+- name: Pitcairn
+  iso_code:
+    alpha2: PN
+    alpha3: PCN
+- name: Poland
+  iso_code:
+    alpha2: PL
+    alpha3: POL
+- name: Portugal
+  iso_code:
+    alpha2: PT
+    alpha3: PRT
+- name: Puerto Rico
+  iso_code:
+    alpha2: PR
+    alpha3: PRI
+- name: Qatar
+  iso_code:
+    alpha2: QA
+    alpha3: QAT
+- name: Réunion
+  iso_code:
+    alpha2: RE
+    alpha3: REU
+- name: Romania
+  iso_code:
+    alpha2: RO
+    alpha3: ROU
+- name: Russian Federation
+  iso_code:
+    alpha2: RU
+    alpha3: RUS
+- name: Rwanda
+  iso_code:
+    alpha2: RW
+    alpha3: RWA
+- name: Saint Barthélemy
+  iso_code:
+    alpha2: BL
+    alpha3: BLM
+- name: Saint Helena, Ascension and Tristan da Cunha
+  iso_code:
+    alpha2: SH
+    alpha3: SHN
+- name: Saint Kitts and Nevis
+  iso_code:
+    alpha2: KN
+    alpha3: KNA
+- name: Saint Lucia
+  iso_code:
+    alpha2: LC
+    alpha3: LCA
+- name: Saint Martin
+  iso_code:
+    alpha2: MF
+    alpha3: MAF
+- name: Saint Pierre and Miquelon
+  iso_code:
+    alpha2: PM
+    alpha3: SPM
+- name: Saint Vincent and the Grenadines
+  iso_code:
+    alpha2: VC
+    alpha3: VCT
+- name: Samoa
+  iso_code:
+    alpha2: WS
+    alpha3: WSM
+- name: San Marino
+  iso_code:
+    alpha2: SM
+    alpha3: SMR
+- name: San Tome and Principe
+  iso_code:
+    alpha2: ST
+    alpha3: STP
+- name: Saudi Arabia
+  iso_code:
+    alpha2: SA
+    alpha3: SAU
+- name: Senegal
+  iso_code:
+    alpha2: SN
+    alpha3: SEN
+- name: Serbia
+  iso_code:
+    alpha2: RS
+    alpha3: SRB
+- name: Seychelles
+  iso_code:
+    alpha2: SC
+    alpha3: SYC
+- name: Sierra Leone
+  iso_code:
+    alpha2: SL
+    alpha3: SLE
+- name: Singapore
+  iso_code:
+    alpha2: SG
+    alpha3: SGP
+- name: Sint Maarten
+  iso_code:
+    alpha2: SX
+    alpha3: SXM
+- name: Slovakia
+  iso_code:
+    alpha2: SK
+    alpha3: SVK
+- name: Slovenia
+  iso_code:
+    alpha2: SI
+    alpha3: SVN
+- name: Solomon Islands
+  iso_code:
+    alpha2: SB
+    alpha3: SLB
+- name: Somalia
+  iso_code:
+    alpha2: SO
+    alpha3: SOM
+- name: South Africa
+  iso_code:
+    alpha2: ZA
+    alpha3: ZAF
+- name: South Georgia and the South Sandwich Islands
+  iso_code:
+    alpha2: GS
+    alpha3: SGS
+- name: South Sudan
+  iso_code:
+    alpha2: SS
+    alpha3: SSD
+- name: Spain
+  iso_code:
+    alpha2: ES
+    alpha3: ESP
+- name: Sri Lanka
+  iso_code:
+    alpha2: LK
+    alpha3: LKA
+- name: Sudan
+  iso_code:
+    alpha2: SD
+    alpha3: SDN
+- name: Suriname
+  iso_code:
+    alpha2: SR
+    alpha3: SUR
+- name: Svalbard and Jan Mayen
+  iso_code:
+    alpha2: SJ
+    alpha3: SJM
+- name: Sweden
+  iso_code:
+    alpha2: SE
+    alpha3: SWE
+- name: Switzerland
+  iso_code:
+    alpha2: CH
+    alpha3: CHE
+- name: Syria
+  iso_code:
+    alpha2: SY
+    alpha3: SYR
+- name: Taiwan
+  iso_code:
+    alpha2: TW
+    alpha3: TWN
+- name: Tajikistan
+  iso_code:
+    alpha2: TJ
+    alpha3: TJK
+- name: Tanzania
+  iso_code:
+    alpha2: TZ
+    alpha3: TZA
+- name: Thailand
+  iso_code:
+    alpha2: TH
+    alpha3: THA
+- name: Timor-Leste
+  iso_code:
+    alpha2: TL
+    alpha3: TLS
+- name: Togo
+  iso_code:
+    alpha2: TG
+    alpha3: TGO
+- name: Tokelau
+  iso_code:
+    alpha2: TK
+    alpha3: TKL
+- name: Tonga
+  iso_code:
+    alpha2: TO
+    alpha3: TON
+- name: Trinidad and Tobago
+  iso_code:
+    alpha2: TT
+    alpha3: TTO
+- name: Tunisia
+  iso_code:
+    alpha2: TN
+    alpha3: TUN
+- name: Türkiye
+  iso_code:
+    alpha2: TR
+    alpha3: TUR
+- name: Turkmenistan
+  iso_code:
+    alpha2: TM
+    alpha3: TKM
+- name: Turks and Caicos Islands
+  iso_code:
+    alpha2: TC
+    alpha3: TCA
+- name: Tuvalu
+  iso_code:
+    alpha2: TV
+    alpha3: TUV
+- name: Uganda
+  iso_code:
+    alpha2: UG
+    alpha3: UGA
+- name: Ukraine
+  iso_code:
+    alpha2: UA
+    alpha3: OKR
+- name: United Arab Emirates
+  iso_code:
+    alpha2: AE
+    alpha3: ARE
+- name: United Kingdom of Great Britain and Northern Ireland
+  iso_code:
+    alpha2: GB
+    alpha3: GBR
+- name: United States of America
+  iso_code:
+    alpha2: US
+    alpha3: USA
+- name: United States Minor Outlying Islands
+  iso_code:
+    alpha2: UM
+    alpha3: UMI
+- name: Uruguay
+  iso_code:
+    alpha2: UY
+    alpha3: URY
+- name: Uzbekistan
+  iso_code:
+    alpha2: UZ
+    alpha3: UZB
+- name: Vanuatu
+  iso_code:
+    alpha2: VU
+    alpha3: VUT
+- name: Venezuela
+  iso_code:
+    alpha2: VE
+    alpha3: VEN
+- name: Vietnam
+  iso_code:
+    alpha2: VN
+    alpha3: VNM
+- name: Virgin Islands (British)
+  iso_code:
+    alpha2: VG
+    alpha3: VGB
+- name: Virgin Islands (U.S.)
+  iso_code:
+    alpha2: VI
+    alpha3: VIR
+- name: Wallis and Futuna
+  iso_code:
+    alpha2: WF
+    alpha3: WLF
+- name: Western Sahara
+  iso_code:
+    alpha2: EH
+    alpha3: ESH
+- name: Yemen
+  iso_code:
+    alpha2: YE
+    alpha3: YEW
+- name: Zambia
+  iso_code:
+    alpha2: ZM
+    alpha3: ZMB
+- name: Zimbabwe
+  iso_code:
+    alpha2: ZW
+    alpha3: ZWE
