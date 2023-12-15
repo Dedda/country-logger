@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use std::iter::Peekable;
+use std::ops::{Add, Mul};
 use std::slice::Iter;
 use include_dir::{Dir, include_dir};
 use lazy_static::lazy_static;
@@ -26,9 +27,19 @@ lazy_static! {
 #[derive(Clone)]
 pub struct Point(pub f32, pub f32);
 
-impl Point {
-    pub fn scale(&self, width: f32, height: f32) -> Point {
-        Point(self.0 * width, self.1 * height)
+impl Add<&Point> for Point {
+    type Output = Point;
+
+    fn add(self, rhs: &Point) -> Self::Output {
+        Point(self.0 + rhs.0, self.1 + rhs.1)
+    }
+}
+
+impl Mul<&Point> for Point {
+    type Output = Point;
+
+    fn mul(self, rhs: &Point) -> Self::Output {
+        Point(self.0 * rhs.0, self.1 * rhs.1)
     }
 }
 

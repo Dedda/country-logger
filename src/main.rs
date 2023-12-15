@@ -15,7 +15,7 @@ fn main() -> iced::Result {
     println!("found {} svgs", COUNTRY_POLYGONS.iter().count());
     MyApp::run(iced::Settings {
         window: iced::window::Settings {
-            size: (1000, 600),
+            size: (1200, 700),
             resizable: false,
             ..Default::default()
         },

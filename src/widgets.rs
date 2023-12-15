@@ -5,7 +5,7 @@ use iced::widget::canvas::{Fill, fill, Frame, Path, Stroke, stroke};
 use itertools::Itertools;
 use crate::database;
 use crate::models::Country;
-use crate::svg_helper::{COUNTRY_POLYGONS, Point, Polygon};
+use crate::svg_helper::{COUNTRY_POLYGONS, Point, Polygon, SVG_HEIGT, SVG_WIDTH};
 
 pub struct CountryList {
     filter: String,
@@ -151,6 +151,44 @@ impl WorldMap {
     }
 }
 
+enum CountryRenderStyle {
+    Normal,
+    Selected,
+    Unselected,
+}
+
+impl CountryRenderStyle {
+    fn get_fill_color(&self, country: &Country) -> Color {
+        match self {
+            CountryRenderStyle::Normal => {
+                let iso3_bytes = country.iso3.as_bytes();
+                color_from_ascii(iso3_bytes)
+            }
+            CountryRenderStyle::Selected => {
+                let iso3_bytes = country.iso3.as_bytes();
+                color_from_ascii(iso3_bytes)
+            }
+            CountryRenderStyle::Unselected => {
+                Color::from_rgb(0.7, 0.7, 0.7)
+            }
+        }
+    }
+}
+
+fn color_from_ascii(ascii: &[u8]) -> Color {
+    Color::from_rgb(
+        color_component_from_ascii(&ascii[0]),
+        color_component_from_ascii(&ascii[1]),
+        color_component_from_ascii(&ascii[2]),
+    )
+}
+
+fn color_component_from_ascii(ascii: &u8) -> f32 {
+    let ascii = ascii - b'A';
+    let ascii = ascii as f32;
+    ascii / 26.0
+}
+
 impl<Message> canvas::Program<Message> for WorldMap {
     type State = ();
 
@@ -163,36 +201,51 @@ impl<Message> canvas::Program<Message> for WorldMap {
         _cursor: Cursor,
     ) -> Vec<canvas::Geometry> {
         let country_geom = self.countries_cache.draw(renderer, bounds.size(), |frame| {
-            let countries_to_show = if let Some(filter) = &self.country_filter {
-                self.countries.iter().filter(|c| filter.accept(c)).collect_vec()
+            if let Some(filter) = &self.country_filter {
+                let (selected, unselected): (Vec<&Country>, Vec<&Country>) = self.countries.iter().partition(|country| filter.accept(country));
+                for country in selected {
+                    draw_country(country, CountryRenderStyle::Selected, frame);
+                }
+                for country in unselected {
+                    draw_country(country, CountryRenderStyle::Unselected, frame);
+                }
             } else {
-                self.countries.iter().collect_vec()
-            };
-            for country in countries_to_show {
-                draw_country(country, frame);
+                for country in &self.countries {
+                    draw_country(country, CountryRenderStyle::Normal, frame);
+                }
             }
         });
         vec![country_geom]
     }
 }
 
-fn draw_country(country: &Country, frame: &mut Frame) {
+fn draw_country(country: &Country, style: CountryRenderStyle, frame: &mut Frame) {
     if let Some(polygons) = COUNTRY_POLYGONS.get(&country.iso2) {
         for polygon in polygons {
-            let iso3_bytes = country.iso3.as_bytes();
-            let color = Color::from_rgb8(iso3_bytes[0], iso3_bytes[1], iso3_bytes[2]);
+            let color = style.get_fill_color(country);
             draw_polygon(polygon, color, frame);
         }
     }
 }
 
 fn draw_polygon(polygon: &Polygon, color: Color, frame: &mut Frame) {
-    let frame_size = Point(frame.width(), frame.height());
+    let aspect_ratio_svg = SVG_WIDTH / SVG_HEIGT;
+    let aspect_ratio_frame = frame.width() / frame.height();
+    let map_render_size: Point;
+    let map_render_offset: Point;
+    if aspect_ratio_svg > aspect_ratio_frame {
+        map_render_size = Point(frame.width(), frame.width() / aspect_ratio_svg);
+        map_render_offset = Point(0.0, (frame.height() - map_render_size.1) / 2.0);
+    } else {
+        map_render_size = Point(frame.height() * aspect_ratio_svg, frame.height());
+        map_render_offset = Point((frame.width() - map_render_size.0) / 2.0, 0.0);
+    }
     if polygon.0.is_empty() {
         return;
     }
     let points: Vec<Point> = polygon.iter()
-        .map(|point| point.scale(frame_size.0, frame_size.1))
+        .map(|point| point.clone() * &map_render_size)
+        .map(|point| point + &map_render_offset)
         .collect();
     let country = Path::new(|path| {
         let mut points = points.iter();
