@@ -1,7 +1,7 @@
 use std::env;
 use clap::Parser;
 use diesel::sqlite::Sqlite;
-use diesel::{QueryDsl, RunQueryDsl, SqliteConnection};
+use diesel::{ExpressionMethods, QueryDsl, RunQueryDsl, SqliteConnection};
 use diesel::r2d2::{ConnectionManager, Pool, PooledConnection};
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 use dotenv::dotenv;
@@ -9,7 +9,9 @@ use homedir::get_my_home;
 use lazy_static::lazy_static;
 use crate::Args;
 use crate::base_data::COUNTRIES;
-use crate::models::{Country, NewCountry};
+use crate::models::{Country, NewCountry, NewCountryVisit};
+use crate::schema::country_visits::country_id;
+use crate::schema::country_visits::dsl::country_visits;
 
 const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
 
@@ -84,4 +86,30 @@ fn populate(connection: &mut SqliteConnection) -> Result<(), diesel::result::Err
 pub fn all_countries(connection: &mut SqliteConnection) -> Result<Vec<Country>, diesel::result::Error> {
     use crate::schema::countries::dsl::*;
     countries.load::<Country>(connection)
+}
+
+pub fn is_country_visited(connection: &mut SqliteConnection, country: &Country) -> Result<bool, diesel::result::Error> {
+    let count = crate::schema::country_visits::table.filter(
+        country_id.eq(country.id)
+    ).count().execute(connection)?;
+    Ok(count > 0)
+}
+
+pub fn visit_country(connection: &mut SqliteConnection, country: &Country) -> Result<(), diesel::result::Error> {
+    use crate::schema::country_visits;
+    println!("Visiting country {}", country.name);
+    let new_visit = NewCountryVisit {
+        country_id: country.id,
+    };
+    diesel::insert_into(country_visits::table)
+        .values(&new_visit)
+        .execute(connection)?;
+    Ok(())
+}
+
+pub fn unvisit_country(connection: &mut SqliteConnection, country: &Country) -> Result<(), diesel::result::Error> {
+    println!("Unvisiting country {}", country.name);
+    diesel::delete(country_visits.filter(country_id.eq(country.id)))
+        .execute(connection)?;
+    Ok(())
 }

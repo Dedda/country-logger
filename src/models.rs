@@ -44,3 +44,9 @@ pub struct CountryVisit {
     pub id: i32,
     pub country_id: i32,
 }
+
+#[derive(Insertable)]
+#[diesel(table_name = crate::schema::country_visits)]
+pub struct NewCountryVisit {
+    pub country_id: i32,
+}

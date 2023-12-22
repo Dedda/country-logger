@@ -1,7 +1,10 @@
 use clap::Parser;
 use iced::{Application, Command, Element, Renderer, Subscription, widget::{column, row}};
+use crate::base_data::COUNTRIES;
+use crate::database::{connection, is_country_visited, unvisit_country, visit_country};
 use crate::svg_helper::COUNTRY_POLYGONS;
-use crate::widgets::{CountryInfo, CountryInfoMessage, CountryList, CountryListMessage, WorldMap, WorldMapCountryFilter, WorldMapMessage};
+use crate::widgets::{CountryInfo, CountryInfoMessage, CountryList, CountryListMessage};
+use crate::widgets::world_map::{WorldMap, WorldMapCountryFilter, WorldMapMessage};
 
 mod base_data;
 mod widgets;
@@ -12,7 +15,10 @@ mod svg_helper;
 
 fn main() -> iced::Result {
     let _db_connection = database::connection().expect("Error opening database");
-    println!("found {} svgs", COUNTRY_POLYGONS.iter().count());
+    println!("found {} svgs for {} countries", COUNTRY_POLYGONS.iter().count(), COUNTRIES.len());
+    if Args::parse().bootstrap_only {
+        return Ok(())
+    }
     MyApp::run(iced::Settings {
         window: iced::window::Settings {
             size: (1200, 700),
@@ -26,6 +32,8 @@ fn main() -> iced::Result {
 struct Args {
     #[arg(short = 'd', long)]
     database_path: Option<String>,
+    #[arg(short = 'b')]
+    bootstrap_only: bool,
 }
 
 struct MyApp {
@@ -103,10 +111,11 @@ impl Application for MyApp {
         match message {
             AppMessage::Event(_) => {}
             AppMessage::CountryList(msg) => {
+                let mut connection = connection().expect("Cannot get database connection");
                 match &msg {
                     CountryListMessage::Search(_) => {}
                     CountryListMessage::Select(Some(country)) => {
-                        self.country_info = Some(CountryInfo::new(country.clone()));
+                        self.country_info = Some(CountryInfo::new(country.clone(), is_country_visited(&mut connection, country).expect("Cannot determine country visits")));
                         self.world_map.update(WorldMapMessage::FilterChanged(WorldMapCountryFilter::Include(vec![country.iso2.clone()])));
                     }
                     CountryListMessage::Select(None) => {
@@ -116,7 +125,19 @@ impl Application for MyApp {
                 }
                 self.country_list.update(msg);
             }
-            AppMessage::CountryInfo(_) => {}
+            AppMessage::CountryInfo(msg) => {
+                let mut connection = connection().expect("Cannot get database connection");
+                match msg {
+                    CountryInfoMessage::VisitCountry(country) => {
+                        visit_country(&mut connection, &country).expect("Cannot visit country");
+                        self.country_info = Some(CountryInfo::new(country.clone(), true));
+                    }
+                    CountryInfoMessage::UnvisitCountry(country) => {
+                        unvisit_country(&mut connection, &country).expect("Cannot unvisit country");
+                        self.country_info = Some(CountryInfo::new(country.clone(), false));
+                    }
+                }
+            }
             AppMessage::WorldMap(msg) => self.world_map.update(msg),
         }
         Command::none()
