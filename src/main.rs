@@ -1,7 +1,9 @@
+use std::path::Path;
 use clap::Parser;
 use iced::{Application, Command, Element, Renderer, Subscription, widget::{column, row}};
 use crate::base_data::COUNTRIES;
-use crate::database::{connection, is_country_visited, unvisit_country, visit_country};
+use crate::database::{connection, is_country_visited, require_connection, unvisit_country, visit_country};
+use crate::importer::simple_import;
 use crate::svg_helper::COUNTRY_POLYGONS;
 use crate::widgets::{CountryInfo, CountryInfoMessage, CountryList, CountryListMessage};
 use crate::widgets::world_map::{WorldMap, WorldMapCountryFilter, WorldMapMessage};
@@ -12,10 +14,14 @@ mod database;
 mod schema;
 mod models;
 mod svg_helper;
+mod importer;
 
 fn main() -> iced::Result {
-    let _db_connection = database::connection().expect("Error opening database");
+    let _db_connection = require_connection();
     println!("found {} svgs for {} countries", COUNTRY_POLYGONS.iter().count(), COUNTRIES.len());
+    if let Some(import_path) = Args::parse().simple_import {
+        simple_import(Path::new(&import_path)).expect("Error during import");
+    }
     if Args::parse().bootstrap_only {
         return Ok(())
     }
@@ -34,6 +40,8 @@ struct Args {
     database_path: Option<String>,
     #[arg(short = 'b')]
     bootstrap_only: bool,
+    #[arg(short = 's', long = "simple-import")]
+    simple_import: Option<String>,
 }
 
 struct MyApp {

@@ -1,7 +1,7 @@
 use std::env;
 use clap::Parser;
 use diesel::sqlite::Sqlite;
-use diesel::{ExpressionMethods, QueryDsl, RunQueryDsl, SqliteConnection};
+use diesel::{ExpressionMethods, QueryDsl, RunQueryDsl, SelectableHelper, SqliteConnection};
 use diesel::r2d2::{ConnectionManager, Pool, PooledConnection};
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 use dotenv::dotenv;
@@ -9,7 +9,9 @@ use homedir::get_my_home;
 use lazy_static::lazy_static;
 use crate::Args;
 use crate::base_data::COUNTRIES;
-use crate::models::{Country, NewCountry, NewCountryVisit};
+use crate::models::{Country, CountryVisit, NewCountry, NewCountryVisit};
+use crate::schema::countries::dsl::countries;
+use crate::schema::countries::iso2;
 use crate::schema::country_visits::country_id;
 use crate::schema::country_visits::dsl::country_visits;
 
@@ -39,6 +41,7 @@ lazy_static! {
 #[derive(Debug)]
 pub enum DatabaseError {
     R2d2(r2d2::Error),
+    Diesel(diesel::result::Error),
     Unknown(String),
 }
 
@@ -51,6 +54,10 @@ impl From<r2d2::Error> for DatabaseError {
 pub fn connection() -> Result<PooledConnection<ConnectionManager<SqliteConnection>>, DatabaseError> {
     let connection = POOL.get()?;
     Ok(connection)
+}
+
+pub fn require_connection() -> PooledConnection<ConnectionManager<SqliteConnection>> {
+    connection().expect("Cannot get database connection")
 }
 
 fn determine_database_path(args: &Args) -> String {
@@ -88,11 +95,23 @@ pub fn all_countries(connection: &mut SqliteConnection) -> Result<Vec<Country>, 
     countries.load::<Country>(connection)
 }
 
+pub fn country_by_iso2(connection: &mut SqliteConnection, iso2_str: &str) -> Result<Option<Country>, diesel::result::Error> {
+    let country = countries.filter(iso2.eq(iso2_str))
+        .limit(1)
+        .select(Country::as_select())
+        .load(connection)?
+        .into_iter()
+        .next();
+    Ok(country)
+}
+
 pub fn is_country_visited(connection: &mut SqliteConnection, country: &Country) -> Result<bool, diesel::result::Error> {
-    let count = crate::schema::country_visits::table.filter(
+    let found = crate::schema::country_visits::table.filter(
         country_id.eq(country.id)
-    ).count().execute(connection)?;
-    Ok(count > 0)
+    )   .limit(1)
+        .select(CountryVisit::as_select())
+        .load(connection)?;
+    Ok(!found.is_empty())
 }
 
 pub fn visit_country(connection: &mut SqliteConnection, country: &Country) -> Result<(), diesel::result::Error> {
