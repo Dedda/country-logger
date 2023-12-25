@@ -24,15 +24,13 @@ lazy_static! {
         let path = determine_database_path(&args);
         let connection_manager = ConnectionManager::<SqliteConnection>::new(path);
         let pool = Pool::builder().build(connection_manager).expect("Cannot open connection pool");
-        {
-            migrate(&mut pool.get().expect("Cannot get connection")).unwrap();
-            let country_count: i64 = crate::schema::countries::table
-                .count()
-                .get_result(&mut pool.get().expect("Cannot get connection"))
-                .unwrap();
-            if country_count == 0 {
-                populate(&mut pool.get().expect("Cannot get connection")).unwrap();
-            }
+        migrate(&mut pool.get().expect("Cannot get connection")).unwrap();
+        let country_count: i64 = crate::schema::countries::table
+            .count()
+            .get_result(&mut pool.get().expect("Cannot get connection"))
+            .unwrap();
+        if country_count == 0 {
+            populate(&mut pool.get().expect("Cannot get connection")).unwrap();
         }
         pool
     };
@@ -112,6 +110,17 @@ pub fn is_country_visited(connection: &mut SqliteConnection, country: &Country) 
         .select(CountryVisit::as_select())
         .load(connection)?;
     Ok(!found.is_empty())
+}
+
+pub fn all_countries_with_visit_status(connection: &mut SqliteConnection) -> Result<Vec<(Country, bool)>, diesel::result::Error> {
+    let found: Vec<(Country, bool)> = crate::schema::countries::table
+        .left_join(crate::schema::country_visits::table)
+        .select((Country::as_select(), Option::<CountryVisit>::as_select()))
+        .load::<(Country, Option<CountryVisit>)>(connection)?
+        .into_iter()
+        .map(|(country, visit)| (country, visit.is_some()))
+        .collect();
+    Ok(found)
 }
 
 pub fn visit_country(connection: &mut SqliteConnection, country: &Country) -> Result<(), diesel::result::Error> {

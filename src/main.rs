@@ -1,6 +1,7 @@
 use std::path::Path;
 use clap::Parser;
 use iced::{Application, Command, Element, Renderer, Subscription, widget::{column, row}};
+use iced::keyboard::{Event, KeyCode};
 use crate::base_data::COUNTRIES;
 use crate::database::{connection, is_country_visited, require_connection, unvisit_country, visit_country};
 use crate::importer::simple_import;
@@ -117,6 +118,24 @@ impl Application for MyApp {
 
     fn update(&mut self, message: Self::Message) -> Command<Self::Message> {
         match message {
+            AppMessage::Event(iced::event::Event::Keyboard(keyboard)) => {
+                match keyboard {
+                    Event::KeyPressed { .. } => {}
+                    Event::KeyReleased { key_code, .. } => {
+                        match key_code {
+                            KeyCode::Escape => {
+                                if self.country_info.is_some() {
+                                    self.country_info = None;
+                                    self.world_map.update(WorldMapMessage::FilterRemoved);
+                                }
+                            }
+                            _ => {}
+                        }
+                    }
+                    Event::CharacterReceived(_) => {}
+                    Event::ModifiersChanged(_) => {}
+                }
+            }
             AppMessage::Event(_) => {}
             AppMessage::CountryList(msg) => {
                 let mut connection = connection().expect("Cannot get database connection");

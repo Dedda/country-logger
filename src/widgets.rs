@@ -140,7 +140,7 @@ pub mod world_map {
 
     pub struct WorldMap {
         country_filter: Option<WorldMapCountryFilter>,
-        countries: Vec<Country>,
+        countries: Vec<(Country, bool)>,
         countries_cache: canvas::Cache,
     }
 
@@ -148,7 +148,7 @@ pub mod world_map {
         pub fn new() -> Self {
             Self {
                 country_filter: None,
-                countries: database::all_countries(&mut database::connection().unwrap()).unwrap(),
+                countries: database::all_countries_with_visit_status(&mut database::require_connection()).unwrap(),
                 countries_cache: canvas::Cache::default(),
             }
         }
@@ -161,6 +161,7 @@ pub mod world_map {
         }
 
         pub fn update(&mut self, msg: WorldMapMessage) {
+            self.countries = database::all_countries_with_visit_status(&mut database::require_connection()).unwrap();
             self.countries_cache.clear();
             match msg {
                 WorldMapMessage::FilterChanged(filter) => self.country_filter = Some(filter),
@@ -170,7 +171,7 @@ pub mod world_map {
     }
 
     enum CountryRenderStyle {
-        Normal,
+        Normal(bool),
         Selected,
         Unselected,
     }
@@ -178,9 +179,19 @@ pub mod world_map {
     impl CountryRenderStyle {
         fn get_fill_color(&self, country: &Country) -> Color {
             match self {
-                CountryRenderStyle::Normal => {
+                CountryRenderStyle::Normal(visited) => {
                     let iso3_bytes = country.iso3.as_bytes();
-                    color_from_ascii(iso3_bytes)
+                    if *visited {
+                        color_from_ascii(iso3_bytes)
+                    } else {
+                        let iso3_bytes: Vec<u8> = iso3_bytes.iter()
+                            .map(|c| {
+                                let diff = b'Z' - c;
+                                b'Z' - (diff / 8)
+                            })
+                            .collect();
+                        color_from_ascii(&iso3_bytes)
+                    }
                 }
                 CountryRenderStyle::Selected => {
                     let iso3_bytes = country.iso3.as_bytes();
@@ -188,6 +199,20 @@ pub mod world_map {
                 }
                 CountryRenderStyle::Unselected => {
                     Color::from_rgb(0.7, 0.7, 0.7)
+                }
+            }
+        }
+
+        fn get_stroke_style(&self) -> stroke::Style {
+            match self {
+                CountryRenderStyle::Normal(_) => {
+                    stroke::Style::Solid(Color::from_rgb(0.0, 0.0, 0.0))
+                }
+                CountryRenderStyle::Selected => {
+                    stroke::Style::Solid(Color::from_rgb(0.0, 1.0, 0.0))
+                }
+                CountryRenderStyle::Unselected => {
+                    stroke::Style::Solid(Color::from_rgb(0.0, 0.0, 0.0))
                 }
             }
         }
@@ -220,16 +245,18 @@ pub mod world_map {
         ) -> Vec<canvas::Geometry> {
             let country_geom = self.countries_cache.draw(renderer, bounds.size(), |frame| {
                 if let Some(filter) = &self.country_filter {
-                    let (selected, unselected): (Vec<&Country>, Vec<&Country>) = self.countries.iter().partition(|country| filter.accept(country));
-                    for country in selected {
-                        draw_country(country, CountryRenderStyle::Selected, frame);
-                    }
+                    let (selected, unselected): (Vec<&Country>, Vec<&Country>) = self.countries.iter()
+                        .map(|(country, _visited)| country)
+                        .partition(|country| filter.accept(country));
                     for country in unselected {
                         draw_country(country, CountryRenderStyle::Unselected, frame);
                     }
+                    for country in selected {
+                        draw_country(country, CountryRenderStyle::Selected, frame);
+                    }
                 } else {
-                    for country in &self.countries {
-                        draw_country(country, CountryRenderStyle::Normal, frame);
+                    for (country, visited) in &self.countries {
+                        draw_country(country, CountryRenderStyle::Normal(*visited), frame);
                     }
                 }
             });
@@ -240,13 +267,12 @@ pub mod world_map {
     fn draw_country(country: &Country, style: CountryRenderStyle, frame: &mut Frame) {
         if let Some(polygons) = COUNTRY_POLYGONS.get(&country.iso2) {
             for polygon in polygons {
-                let color = style.get_fill_color(country);
-                draw_polygon(polygon, color, frame);
+                draw_polygon(polygon, country, &style, frame);
             }
         }
     }
 
-    fn draw_polygon(polygon: &Polygon, color: Color, frame: &mut Frame) {
+    fn draw_polygon(polygon: &Polygon, country: &Country, style: &CountryRenderStyle, frame: &mut Frame) {
         let aspect_ratio_svg = SVG_WIDTH / SVG_HEIGT;
         let aspect_ratio_frame = frame.width() / frame.height();
         let map_render_size: Point;
@@ -265,7 +291,7 @@ pub mod world_map {
             .map(|point| point.clone() * &map_render_size)
             .map(|point| point + &map_render_offset)
             .collect();
-        let country = Path::new(|path| {
+        let path = Path::new(|path| {
             let mut points = points.iter();
             let origin = points.next().unwrap();
             path.move_to(iced::Point::new(origin.0, origin.1));
@@ -274,9 +300,10 @@ pub mod world_map {
             }
             path.close();
         });
-        frame.fill(&country, Fill { style: fill::Style::Solid(color), ..Fill::default() });
-        frame.stroke(&country, Stroke {
-            style: stroke::Style::Solid(Color::from_rgb(0.0, 0.0, 0.0)),
+        let color = style.get_fill_color(country);
+        frame.fill(&path, Fill { style: fill::Style::Solid(color), ..Fill::default() });
+        frame.stroke(&path, Stroke {
+            style: style.get_stroke_style(),
             width: 1.0,
             ..Stroke::default()
         });
