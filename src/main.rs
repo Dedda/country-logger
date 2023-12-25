@@ -120,20 +120,13 @@ impl Application for MyApp {
         match message {
             AppMessage::Event(iced::event::Event::Keyboard(keyboard)) => {
                 match keyboard {
-                    Event::KeyPressed { .. } => {}
                     Event::KeyReleased { key_code, .. } => {
-                        match key_code {
-                            KeyCode::Escape => {
-                                if self.country_info.is_some() {
-                                    self.country_info = None;
-                                    self.world_map.update(WorldMapMessage::FilterRemoved);
-                                }
-                            }
-                            _ => {}
+                        if key_code == KeyCode::Escape && self.country_info.is_some() {
+                            self.country_info = None;
+                            self.world_map.update(WorldMapMessage::FilterRemoved);
                         }
                     }
-                    Event::CharacterReceived(_) => {}
-                    Event::ModifiersChanged(_) => {}
+                    _ => {}
                 }
             }
             AppMessage::Event(_) => {}
