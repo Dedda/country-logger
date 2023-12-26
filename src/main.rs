@@ -1,6 +1,8 @@
 use std::path::Path;
 use clap::Parser;
+use Event::KeyReleased as KeyReleasedEvent;
 use iced::{Application, Command, Element, Renderer, Subscription, widget::{column, row}};
+use iced::event::Event::Keyboard as KeyboardEvent;
 use iced::keyboard::{Event, KeyCode};
 use crate::base_data::COUNTRIES;
 use crate::database::{connection, is_country_visited, require_connection, unvisit_country, visit_country};
@@ -17,6 +19,8 @@ mod models;
 mod svg_helper;
 mod importer;
 
+const ICON: &[u8] = include_bytes!("assets/globe_icon.png");
+
 fn main() -> iced::Result {
     let _db_connection = require_connection();
     println!("found {} svgs for {} countries", COUNTRY_POLYGONS.iter().count(), COUNTRIES.len());
@@ -26,9 +30,11 @@ fn main() -> iced::Result {
     if Args::parse().bootstrap_only {
         return Ok(())
     }
+    let icon = iced::window::icon::from_file_data(ICON, Some(image::ImageFormat::Png)).expect("Cannot load icon");
     MyApp::run(iced::Settings {
         window: iced::window::Settings {
             size: (1200, 700),
+            icon: Some(icon),
             ..Default::default()
         },
         ..Default::default()
@@ -99,6 +105,46 @@ impl MyApp {
             column!().into()
         }
     }
+
+    fn update_iced_event(&mut self, event: iced::event::Event) {
+        if let KeyboardEvent(KeyReleasedEvent { key_code, .. }) = event {
+            if key_code == KeyCode::Escape && self.country_info.is_some() {
+                self.country_info = None;
+                self.world_map.update(WorldMapMessage::FilterRemoved);
+            }
+        }
+    }
+
+    fn update_country_list_event(&mut self, msg: CountryListMessage) {
+        let mut connection = connection().expect("Cannot get database connection");
+        match &msg {
+            CountryListMessage::Search(_) => {}
+            CountryListMessage::Select(Some(country)) => {
+                self.country_info = Some(CountryInfo::new(country.clone(), is_country_visited(&mut connection, country).expect("Cannot determine country visits")));
+                self.world_map.update(WorldMapMessage::FilterChanged(WorldMapCountryFilter::Include(vec![country.iso2.clone()])));
+            }
+            CountryListMessage::Select(None) => {
+                self.country_info = None;
+                self.world_map.update(WorldMapMessage::FilterRemoved);
+            }
+        }
+        self.country_list.update(msg);
+    }
+
+    fn update_country_info_event(&mut self, msg: CountryInfoMessage) {
+        let mut connection = connection().expect("Cannot get database connection");
+        match msg {
+            CountryInfoMessage::VisitCountry(country) => {
+                visit_country(&mut connection, &country).expect("Cannot visit country");
+                self.country_info = Some(CountryInfo::new(country.clone(), true));
+            }
+            CountryInfoMessage::UnvisitCountry(country) => {
+                unvisit_country(&mut connection, &country).expect("Cannot unvisit country");
+                self.country_info = Some(CountryInfo::new(country.clone(), false));
+            }
+        }
+    }
+
 }
 
 impl Application for MyApp {
@@ -118,46 +164,9 @@ impl Application for MyApp {
 
     fn update(&mut self, message: Self::Message) -> Command<Self::Message> {
         match message {
-            AppMessage::Event(iced::event::Event::Keyboard(keyboard)) => {
-                match keyboard {
-                    Event::KeyReleased { key_code, .. } => {
-                        if key_code == KeyCode::Escape && self.country_info.is_some() {
-                            self.country_info = None;
-                            self.world_map.update(WorldMapMessage::FilterRemoved);
-                        }
-                    }
-                    _ => {}
-                }
-            }
-            AppMessage::Event(_) => {}
-            AppMessage::CountryList(msg) => {
-                let mut connection = connection().expect("Cannot get database connection");
-                match &msg {
-                    CountryListMessage::Search(_) => {}
-                    CountryListMessage::Select(Some(country)) => {
-                        self.country_info = Some(CountryInfo::new(country.clone(), is_country_visited(&mut connection, country).expect("Cannot determine country visits")));
-                        self.world_map.update(WorldMapMessage::FilterChanged(WorldMapCountryFilter::Include(vec![country.iso2.clone()])));
-                    }
-                    CountryListMessage::Select(None) => {
-                        self.country_info = None;
-                        self.world_map.update(WorldMapMessage::FilterRemoved);
-                    }
-                }
-                self.country_list.update(msg);
-            }
-            AppMessage::CountryInfo(msg) => {
-                let mut connection = connection().expect("Cannot get database connection");
-                match msg {
-                    CountryInfoMessage::VisitCountry(country) => {
-                        visit_country(&mut connection, &country).expect("Cannot visit country");
-                        self.country_info = Some(CountryInfo::new(country.clone(), true));
-                    }
-                    CountryInfoMessage::UnvisitCountry(country) => {
-                        unvisit_country(&mut connection, &country).expect("Cannot unvisit country");
-                        self.country_info = Some(CountryInfo::new(country.clone(), false));
-                    }
-                }
-            }
+            AppMessage::Event(event) => self.update_iced_event(event),
+            AppMessage::CountryList(msg) => self.update_country_list_event(msg),
+            AppMessage::CountryInfo(msg) => self.update_country_info_event(msg),
             AppMessage::WorldMap(msg) => self.world_map.update(msg),
         }
         Command::none()

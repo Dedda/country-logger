@@ -119,14 +119,12 @@ pub mod world_map {
 
     #[derive(Debug)]
     pub enum WorldMapCountryFilter {
-        _Exclude(Vec<String>),
         Include(Vec<String>),
     }
 
     impl WorldMapCountryFilter {
         fn accept(&self, country: &Country) -> bool {
             match self {
-                WorldMapCountryFilter::_Exclude(exclusions) => !exclusions.contains(&country.iso2),
                 WorldMapCountryFilter::Include(inclusions) => inclusions.contains(&country.iso2),
             }
         }
