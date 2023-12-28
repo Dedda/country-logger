@@ -8,6 +8,7 @@ pub struct Country {
     pub name: String,
     pub iso2: String,
     pub iso3: String,
+    pub description: Option<String>,
 }
 
 impl Country {
@@ -25,6 +26,7 @@ pub struct NewCountry {
     pub name: String,
     pub iso2: String,
     pub iso3: String,
+    pub description: Option<String>,
 }
 
 impl From<BaseDataCountry> for NewCountry {
@@ -33,6 +35,7 @@ impl From<BaseDataCountry> for NewCountry {
             name: value.name,
             iso2: value.iso_code.alpha2,
             iso3: value.iso_code.alpha3,
+            description: None,
         }
     }
 }

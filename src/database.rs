@@ -88,11 +88,6 @@ fn populate(connection: &mut SqliteConnection) -> Result<(), diesel::result::Err
     Ok(())
 }
 
-pub fn all_countries(connection: &mut SqliteConnection) -> Result<Vec<Country>, diesel::result::Error> {
-    use crate::schema::countries::dsl::*;
-    countries.load::<Country>(connection)
-}
-
 pub fn country_by_iso2(connection: &mut SqliteConnection, iso2_str: &str) -> Result<Option<Country>, diesel::result::Error> {
     let country = countries.filter(iso2.eq(iso2_str))
         .limit(1)
