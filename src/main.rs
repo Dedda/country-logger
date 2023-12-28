@@ -8,7 +8,7 @@ use crate::base_data::COUNTRIES;
 use crate::database::{connection, is_country_visited, require_connection, unvisit_country, visit_country};
 use crate::importer::simple_import;
 use crate::svg_helper::COUNTRY_POLYGONS;
-use crate::widgets::{CountryInfo, CountryInfoMessage};
+use crate::widgets::country_info::{CountryInfo, CountryInfoMessage};
 use crate::widgets::country_filter::{CountryFilters, CountryFiltersMessage};
 use crate::widgets::country_list::{CountryList, CountryListMessage};
 use crate::widgets::world_map::{WorldMap, WorldMapCountryFilter, WorldMapMessage};
@@ -160,15 +160,16 @@ impl MyApp {
 
     fn update_country_info_event(&mut self, msg: CountryInfoMessage) {
         let mut connection = connection().expect("Cannot get database connection");
-        match msg {
+        match &msg {
             CountryInfoMessage::VisitCountry(country) => {
-                visit_country(&mut connection, &country).expect("Cannot visit country");
-                self.country_info = Some(CountryInfo::new(country.clone(), true));
+                visit_country(&mut connection, country).expect("Cannot visit country");
             }
             CountryInfoMessage::UnvisitCountry(country) => {
-                unvisit_country(&mut connection, &country).expect("Cannot unvisit country");
-                self.country_info = Some(CountryInfo::new(country.clone(), false));
+                unvisit_country(&mut connection, country).expect("Cannot unvisit country");
             }
+        }
+        if let Some(country_info) = &mut self.country_info {
+            country_info.update(msg);
         }
     }
 

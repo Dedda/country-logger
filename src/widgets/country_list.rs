@@ -60,7 +60,7 @@ impl CountryList {
             .into()
     }
 
-    pub fn update(&mut self, message: CountryListMessage) -> Vec<CountryListMessage> {
+    pub fn update(&mut self, message: CountryListMessage) {
         match message {
             CountryListMessage::Search(filter) => {
                 self.filter = filter;
@@ -70,7 +70,6 @@ impl CountryList {
                 self.filter_only_visited = only_visited;
             }
         }
-        vec![]
     }
 
     fn get_filtered_countries(&self) -> Vec<Country> {
