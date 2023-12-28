@@ -7,7 +7,7 @@ use lazy_static::lazy_static;
 use svg::node::element::path::{Command, Data, Number, Position};
 use svg::parser::Event;
 
-static SVG_FILES: Dir = include_dir!("src/svg");
+static SVG_FILES: Dir = include_dir!("src/assets/borders");
 pub const SVG_WIDTH: f32 = 2000.0;
 pub const SVG_HEIGT: f32 = 857.0;
 
@@ -107,7 +107,7 @@ fn polygons_from_svg(source: &str) -> Vec<Polygon> {
                         paths.push(Polygon(current_path.clone()));
                         current_path.clear();
                     }
-                    x => println!("Unsupported svg event: {:?}", x)
+                    x => println!("Unsupported borders event: {:?}", x)
                 }
             }
         }

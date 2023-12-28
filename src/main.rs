@@ -8,7 +8,9 @@ use crate::base_data::COUNTRIES;
 use crate::database::{connection, is_country_visited, require_connection, unvisit_country, visit_country};
 use crate::importer::simple_import;
 use crate::svg_helper::COUNTRY_POLYGONS;
-use crate::widgets::{CountryInfo, CountryInfoMessage, CountryList, CountryListMessage};
+use crate::widgets::{CountryInfo, CountryInfoMessage};
+use crate::widgets::country_filter::{CountryFilters, CountryFiltersMessage};
+use crate::widgets::country_list::{CountryList, CountryListMessage};
 use crate::widgets::world_map::{WorldMap, WorldMapCountryFilter, WorldMapMessage};
 
 mod base_data;
@@ -18,6 +20,7 @@ mod schema;
 mod models;
 mod svg_helper;
 mod importer;
+mod flag_helper;
 
 const ICON: &[u8] = include_bytes!("assets/globe_icon.png");
 
@@ -37,6 +40,7 @@ fn main() -> iced::Result {
             icon: Some(icon),
             ..Default::default()
         },
+        antialiasing: true,
         ..Default::default()
     })
 }
@@ -53,6 +57,7 @@ struct Args {
 
 struct MyApp {
     country_list: CountryList,
+    country_filter: CountryFilters,
     country_info: Option<CountryInfo>,
     world_map: WorldMap,
 }
@@ -61,6 +66,7 @@ struct MyApp {
 enum AppMessage {
     Event(iced::event::Event),
     CountryList(CountryListMessage),
+    CountryFilter(CountryFiltersMessage),
     CountryInfo(CountryInfoMessage),
     WorldMap(WorldMapMessage),
 }
@@ -68,6 +74,12 @@ enum AppMessage {
 impl From<CountryListMessage> for AppMessage {
     fn from(value: CountryListMessage) -> Self {
         AppMessage::CountryList(value)
+    }
+}
+
+impl From<CountryFiltersMessage> for AppMessage {
+    fn from(value: CountryFiltersMessage) -> Self {
+        AppMessage::CountryFilter(value)
     }
 }
 
@@ -87,6 +99,7 @@ impl Default for MyApp {
     fn default() -> Self {
         Self {
             country_list: CountryList::new(),
+            country_filter: CountryFilters::new(),
             country_info: None,
             world_map: WorldMap::new(),
         }
@@ -127,8 +140,22 @@ impl MyApp {
                 self.country_info = None;
                 self.world_map.update(WorldMapMessage::FilterRemoved);
             }
+            CountryListMessage::FilterOnlyVisited(_) => {}
         }
         self.country_list.update(msg);
+    }
+
+    fn update_country_filter_event(&mut self, msg: CountryFiltersMessage) {
+        match msg {
+            CountryFiltersMessage::SearchString(search) => {
+                self.country_list.update(CountryListMessage::Search(search.clone()));
+                self.country_filter.update(CountryFiltersMessage::SearchString(search));
+            }
+            CountryFiltersMessage::OnlyVisited(only_visited) => {
+                self.country_list.update(CountryListMessage::FilterOnlyVisited(only_visited));
+                self.country_filter.update(CountryFiltersMessage::OnlyVisited(only_visited));
+            }
+        }
     }
 
     fn update_country_info_event(&mut self, msg: CountryInfoMessage) {
@@ -166,6 +193,7 @@ impl Application for MyApp {
         match message {
             AppMessage::Event(event) => self.update_iced_event(event),
             AppMessage::CountryList(msg) => self.update_country_list_event(msg),
+            AppMessage::CountryFilter(msg) => self.update_country_filter_event(msg),
             AppMessage::CountryInfo(msg) => self.update_country_info_event(msg),
             AppMessage::WorldMap(msg) => self.world_map.update(msg),
         }
@@ -173,8 +201,14 @@ impl Application for MyApp {
     }
 
     fn view(&self) -> Element<'_, Self::Message, Renderer<Self::Theme>> {
-        row!(
+        let country_list = column!(
+            self.country_filter.view().map(AppMessage::from),
+            iced::widget::horizontal_rule(0),
             self.country_list.view().map(AppMessage::from),
+        )
+        .width(iced::Length::Fixed(250.0));
+        row!(
+            country_list,
             iced::widget::vertical_rule(0),
             self.view_map(),
             iced::widget::vertical_rule(0),

@@ -2,3 +2,4 @@
 .idea
 db.sqlite
 simple_import.csv
+.DS_Store
