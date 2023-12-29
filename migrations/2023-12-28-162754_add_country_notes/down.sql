@@ -1,1 +1,2 @@
 -- This file should undo anything in `up.sql`
+-- TODO: Dummy table to remove column

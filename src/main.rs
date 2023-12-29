@@ -6,7 +6,7 @@ use iced::event::Event::Keyboard as KeyboardEvent;
 use iced::keyboard::{Event, KeyCode};
 use crate::base_data::COUNTRIES;
 use crate::database::{connection, is_country_visited, require_connection, unvisit_country, visit_country};
-use crate::importer::simple_import;
+use crate::importer::{full_export, full_import, simple_import};
 use crate::svg_helper::COUNTRY_POLYGONS;
 use crate::widgets::country_info::{CountryInfo, CountryInfoMessage};
 use crate::widgets::country_filter::{CountryFilters, CountryFiltersMessage};
@@ -27,8 +27,13 @@ const ICON: &[u8] = include_bytes!("assets/globe_icon.png");
 fn main() -> iced::Result {
     let _db_connection = require_connection();
     println!("found {} svgs for {} countries", COUNTRY_POLYGONS.iter().count(), COUNTRIES.len());
-    if let Some(import_path) = Args::parse().simple_import {
+    if let Some(import_path) = Args::parse().full_import {
+        full_import(Path::new(&import_path)).expect("Error during import");
+    } else if let Some(import_path) = Args::parse().simple_import {
         simple_import(Path::new(&import_path)).expect("Error during import");
+    }
+    if let Some(export_file) = Args::parse().full_export {
+        full_export(Path::new(&export_file)).expect("Error during export");
     }
     if Args::parse().bootstrap_only {
         return Ok(())
@@ -53,6 +58,10 @@ struct Args {
     bootstrap_only: bool,
     #[arg(short = 's', long = "simple-import")]
     simple_import: Option<String>,
+    #[arg(short = 'i', long = "import-file")]
+    full_import: Option<String>,
+    #[arg(short = 'e', long = "export-file")]
+    full_export: Option<String>,
 }
 
 struct MyApp {

@@ -1,7 +1,7 @@
 use diesel::{Associations, Insertable, Queryable, Selectable};
 use crate::base_data::BaseDataCountry;
 
-#[derive(Queryable, Selectable, Debug, Clone)]
+#[derive(Insertable, Queryable, Selectable, Debug, Clone)]
 #[diesel(table_name = crate::schema::countries)]
 pub struct Country {
     pub id: i32,
@@ -40,7 +40,7 @@ impl From<BaseDataCountry> for NewCountry {
     }
 }
 
-#[derive(Queryable, Selectable, Associations, Debug, Clone)]
+#[derive(Insertable, Queryable, Selectable, Associations, Debug, Clone)]
 #[diesel(belongs_to(Country))]
 #[diesel(table_name = crate::schema::country_visits)]
 pub struct CountryVisit {

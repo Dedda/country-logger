@@ -49,6 +49,12 @@ impl From<r2d2::Error> for DatabaseError {
     }
 }
 
+impl From<diesel::result::Error> for DatabaseError {
+    fn from(value: diesel::result::Error) -> Self {
+        DatabaseError::Diesel(value)
+    }
+}
+
 pub fn connection() -> Result<PooledConnection<ConnectionManager<SqliteConnection>>, DatabaseError> {
     let connection = POOL.get()?;
     Ok(connection)
@@ -107,6 +113,13 @@ pub fn is_country_visited(connection: &mut SqliteConnection, country: &Country) 
     Ok(!found.is_empty())
 }
 
+pub fn all_countries(connection: &mut SqliteConnection) -> Result<Vec<Country>, diesel::result::Error> {
+    let found = countries
+        .select(Country::as_select())
+        .load(connection)?;
+    Ok(found)
+}
+
 pub fn all_countries_with_visit_status(connection: &mut SqliteConnection) -> Result<Vec<(Country, bool)>, diesel::result::Error> {
     let found: Vec<(Country, bool)> = crate::schema::countries::table
         .left_join(crate::schema::country_visits::table)
@@ -133,6 +146,22 @@ pub fn visit_country(connection: &mut SqliteConnection, country: &Country) -> Re
 pub fn unvisit_country(connection: &mut SqliteConnection, country: &Country) -> Result<(), diesel::result::Error> {
     println!("Unvisiting country {}", country.name);
     diesel::delete(country_visits.filter(country_id.eq(country.id)))
+        .execute(connection)?;
+    Ok(())
+}
+
+pub fn import_country_with_id(connection: &mut SqliteConnection, country: Country) -> Result<(), diesel::result::Error> {
+    use crate::schema::countries;
+    diesel::insert_into(countries::table)
+        .values(&country)
+        .execute(connection)?;
+    Ok(())
+}
+
+pub fn import_country_visit(connection: &mut SqliteConnection, visit: CountryVisit) -> Result<(), diesel::result::Error> {
+    use crate::schema::country_visits;
+    diesel::insert_into(country_visits::table)
+        .values(&visit)
         .execute(connection)?;
     Ok(())
 }
